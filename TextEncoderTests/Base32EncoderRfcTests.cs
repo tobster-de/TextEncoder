@@ -5,20 +5,26 @@ using TextEncoder.Encoder;
 namespace TextEncoderTests;
 
 [TestFixture]
-public class Base58EncoderTests : GenericTestBase<Base58Encoder>
+public class Base32EncoderRfcTests : GenericTestBase<Base32Encoder>
 {
-    public Base58EncoderTests()
+    public Base32EncoderRfcTests()
     {
-        this.Subject = new Base58Encoder();
+        this.Subject = Base32Encoder.Rfc4648;
     }
 
     public static IEnumerable TestData
     {
         get
         {
-            yield return new TestCaseData("Test", "3A836b");
-            yield return new TestCaseData("TestTest", "F7kVCJSZXKy");
-            yield return new TestCaseData("TestTestTest", "2bNcNLF1HWfuXwN43");
+            yield return new TestCaseData("A", "IE======");
+            yield return new TestCaseData("AB", "IFBA====");
+            yield return new TestCaseData("ABC", "IFBEG===");
+            yield return new TestCaseData("XYZ", "LBMVU===");
+            yield return new TestCaseData("1234", "GEZDGNA=");
+            yield return new TestCaseData("Test", "KRSXG5A=");
+            yield return new TestCaseData("TestTest", "KRSXG5CUMVZXI===");
+            yield return new TestCaseData("TestTestTest", "KRSXG5CUMVZXIVDFON2A====");
+            yield return new TestCaseData("TestTestTestTest", "KRSXG5CUMVZXIVDFON2FIZLTOQ======");
         }
     }
 

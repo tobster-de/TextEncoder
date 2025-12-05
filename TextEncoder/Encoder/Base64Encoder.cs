@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TextEncoder.Encoder;
+﻿namespace TextEncoder.Encoder;
 
 /// <summary>
 /// Base64 algorithm uses 6 bit segments
@@ -11,7 +9,7 @@ namespace TextEncoder.Encoder;
 public class Base64Encoder : BaseEncoder
 {
     private readonly char[] _characterSet;
-    private readonly byte[] _characterMap = new byte[255];
+    private readonly byte[] _characterMap;
     private readonly bool _usePadding;
     private readonly char? _paddingChar;
 
@@ -25,7 +23,7 @@ public class Base64Encoder : BaseEncoder
     internal Base64Encoder(ICharacterMapping characterMapping)
     {
         _characterSet = characterMapping.Characters;
-        this.CreateCharacterMap(characterMapping.CharValues);
+        _characterMap = CreateCharacterMap(characterMapping.CharValues);
 
         _paddingChar = characterMapping.PaddingChar;
         _usePadding = characterMapping.PaddingChar.HasValue;
@@ -39,14 +37,6 @@ public class Base64Encoder : BaseEncoder
     public static string ToBase64String(byte[] data)
     {
         return Default.ToBase(data);
-    }
-
-    private void CreateCharacterMap(Dictionary<char, byte> characterValues)
-    {
-        foreach (KeyValuePair<char, byte> valuePair in characterValues)
-        {
-            _characterMap[(byte)valuePair.Key] = valuePair.Value;
-        }
     }
 
     public override string ToBase(byte[] data)

@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace TextEncoder.Encoder;
 
@@ -7,53 +8,138 @@ namespace TextEncoder.Encoder;
 /// </summary>
 public class Base32Encoder : BaseEncoder
 {
-	//The RFC 4648 Base32 alphabet
-	public static readonly Base32Encoder Rfc4648     = new Base32Encoder("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", true);
-	public static readonly Base32Encoder ExtendedHex = new Base32Encoder("0123456789ABCDEFGHIJKLMNOPQRSTUV", true);
-	public static readonly Base32Encoder ZBase32     = new Base32Encoder("ybndrfg8ejkmcpqxot1uwisza345h769", false);
+    private readonly char[] _characterSet;
+    private readonly byte[] _characterMap;
+    private readonly char? _paddingChar;
+    private readonly bool _usePadding;
 
-	public static Base32Encoder GetEncoder(Base32Format format)
-	{
-		switch (format)
-		{
-			case Base32Format.RFC4648:
-				return Rfc4648;
-			case Base32Format.ZBase32:
-				return ZBase32;
-			//case Base32Format.Crockfords: //TODO
+    //The RFC 4648 Base32 alphabet
+    public static readonly Base32Encoder Rfc4648 = new Base32Encoder(Base32Mapping.Rfc4648);
+    public static readonly Base32Encoder ZBase32 = new Base32Encoder(Base32Mapping.ZBase32);
+    public static readonly Base32Encoder Crockford = new Base32Encoder(Base32Mapping.Crockford);
+    public static readonly Base32Encoder ExtendedHex = new Base32Encoder(Base32Mapping.ExtendedHex);
 
+    public static Base32Encoder GetEncoder(Base32Format format)
+    {
+        switch (format)
+        {
+            case Base32Format.RFC4648:
+                return Rfc4648;
+            case Base32Format.ZBase32:
+                return ZBase32;
+            case Base32Format.Crockford:
+                return Crockford;
+            case Base32Format.ExtendedHex:
+                return ExtendedHex;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(format), format, null);
+        }
+    }
 
-			case Base32Format.ExtendedHex:
-				return ExtendedHex;
-			default:
-				throw new ArgumentOutOfRangeException(nameof(format), format, null);
-		}
-	}
+    private Base32Encoder(ICharacterMapping characterMapping)
+    {
+        _characterSet = characterMapping.Characters;
+        _characterMap = CreateCharacterMap(characterMapping.CharValues);
 
-	private Base32Encoder(string characterSet, bool usePadding)
-	{
-		this.CharacterSet = characterSet;
-		this.UsePadding = usePadding;
-	}
+        _paddingChar = characterMapping.PaddingChar;
+        _usePadding = characterMapping.PaddingChar.HasValue;
+    }
 
-	/// <inheritdoc />
-	public string CharacterSet { get; }
+    /// <inheritdoc />
+    public override string ToBase(byte[] data)
+    {
+        if (data == null || data.Length == 0)
+        {
+            return string.Empty;
+        }
 
-	/// <inheritdoc />
-	public bool UsePadding { get; }
+        StringBuilder result = new StringBuilder((data.Length * 8 + 4) / 5);
+        int buffer = 0;
+        int bitsLeft = 0;
 
-	/// <inheritdoc />
-	public char PaddingChar => '=';
+        foreach (byte b in data)
+        {
+            buffer = (buffer << 8) | b;
+            bitsLeft += 8;
+            while (bitsLeft >= 5)
+            {
+                int index = (buffer >> (bitsLeft - 5)) & 0x1F;
+                result.Append(_characterSet[index]);
+                bitsLeft -= 5;
+            }
+        }
 
-	/// <inheritdoc />
-	public override string ToBase(byte[] data)
-	{
-		return string.Empty;
-	}
+        if (bitsLeft > 0)
+        {
+            int index = (buffer << (5 - bitsLeft)) & 0x1F;
+            result.Append(_characterSet[index]);
+        }
 
-	/// <inheritdoc />
-	public override byte[] FromBase(string data)
-	{
-		return [];
-	}
+        if (_usePadding)
+        {
+            while (result.Length % 8 != 0)
+            {
+                result.Append(_paddingChar!.Value);
+            }
+        }
+
+        return result.ToString();
+    }
+
+    /// <inheritdoc />
+    public override byte[] FromBase(string data)
+    {
+        if (string.IsNullOrEmpty(data))
+        {
+            return [];
+        }
+
+        int padding = 0;
+        if (_usePadding)
+        {
+            for (padding = 0; padding < data.Length && data[data.Length - padding - 1] == _paddingChar; padding++) ;
+        }
+
+        // result size: 5 bits per char, 8 bits per byte
+        byte[] result = new byte[(data.Length - padding) * 5 / 8];
+
+        int p = 0;
+        int buffer = 0;
+        int bitsLeft = 0;
+
+        foreach (char c in data)
+        {
+            // Handle padding: RFC4648 usually ends with padding. 
+            // If we encounter padding, we assume the rest is padding and stop.
+            if (_usePadding && c == _paddingChar)
+            {
+                break;
+            }
+
+            if (c >= _characterMap.Length)
+            {
+                throw new FormatException($"Invalid character '{c}' encountered.");
+            }
+
+            byte value = _characterMap[c];
+
+            // invalid characters are initialized with 0xFF (255)
+            if (value == 0xFF)
+            {
+                throw new FormatException($"Invalid character '{c}' encountered.");
+            }
+
+            buffer = (buffer << 5) | value;
+            bitsLeft += 5;
+
+            if (bitsLeft >= 8)
+            {
+                byte b = (byte)((buffer >> (bitsLeft - 8)) & 0xFF);
+                result[p++] = b;
+                bitsLeft -= 8;
+            }
+        }
+
+        return result;
+    }
 }

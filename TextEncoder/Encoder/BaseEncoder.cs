@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace TextEncoder.Encoder;
 
@@ -6,6 +8,29 @@ public abstract class BaseEncoder : ITextEncoder
 {
     private readonly Encoding _encoding = new UTF8Encoding(true, true);
 
+    protected static byte[] CreateCharacterMap(Dictionary<char, byte> characterValues)
+    {
+        byte[] characterMap = new byte[255];
+
+#if NETSTANDARD
+        Array.Fill(characterMap, (byte)0xFF);
+#elif NETFRAMEWORK
+        for (int i = 0; i < characterMap.Length; i++)
+        {
+            characterMap[i] = (byte)0xFF;
+        }
+#else
+#error "Target framework not supported"
+#endif
+
+        foreach (KeyValuePair<char, byte> valuePair in characterValues)
+        {
+            characterMap[(byte)valuePair.Key] = valuePair.Value;
+        }
+
+        return characterMap;
+    }
+    
     /// <inheritdoc />
     public string Encode(string text)
     {

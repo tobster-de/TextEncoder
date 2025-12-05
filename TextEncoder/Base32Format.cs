@@ -13,15 +13,13 @@ public enum Base32Format
     ///     bits is not a multiple of 8, and omits trailing padding characters.
     /// </summary>
     ZBase32 = 1,
-    /*
     /// <summary>
     ///		Represents Crockfords Base32 alternative design for Base32
     ///     Douglas Crockford proposed using additional characters for a checksum.
     ///     It excludes the letters I, L, and O to avoid confusion with digits.
     ///     It also excludes the letter U to reduce the likelihood of accidental obscenity.
     /// </summary>
-    Crockfords = 2,
-    */
+    Crockford = 2,
     /// <summary>
     ///		Triacontakaidecimal is another alternative design for Base 32, which extends hexadecimal in a more natural
     ///     way and was first proposed by Christian Lanctot, a programmer working at Sage software, in a letter to
