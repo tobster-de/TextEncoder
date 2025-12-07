@@ -8,8 +8,14 @@ namespace TextEncoder.Encoder;
 /// </summary>
 public class Base58Encoder : BaseEncoder
 {
+    public static readonly Base58Encoder Instance = new();
+    
     private const string CharacterSet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
+    private Base58Encoder()
+    {
+    }
+    
     /// <inheritdoc />
     public override string ToBase(byte[] data)
     {
