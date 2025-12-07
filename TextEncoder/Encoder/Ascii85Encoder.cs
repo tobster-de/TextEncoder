@@ -6,11 +6,20 @@ namespace TextEncoder.Encoder;
 
 public class Ascii85Encoder : BaseEncoder
 {
-    public static readonly Ascii85Encoder Original = new();
-    
-    private Ascii85Encoder()
+    public static readonly Ascii85Encoder Original = new Ascii85Encoder(Ascii85Mapping.Original, useCompression: true, ignoreWhitespace: true);
+    public static readonly Ascii85Encoder ZeroMq = new Ascii85Encoder(Ascii85Mapping.ZeroMq, useCompression: false, ignoreWhitespace: false);
+
+    private readonly ICharacterMapping _mapping;
+    private readonly byte[] _characterMap;
+    private readonly bool _useCompression;
+    private readonly bool _ignoreWhitespace;
+
+    private Ascii85Encoder(Ascii85Mapping mapping, bool useCompression, bool ignoreWhitespace)
     {
-        // Standard ASCII 85 verwendet einen festen Zeichensatz ('!' bis 'u')
+        _mapping = mapping;
+        _characterMap = CreateCharacterMap(mapping.CharValues);
+        _useCompression = useCompression;
+        _ignoreWhitespace = ignoreWhitespace;
     }
 
     /// <inheritdoc />
@@ -21,7 +30,7 @@ public class Ascii85Encoder : BaseEncoder
             return string.Empty;
         }
 
-        // Faktor ~1.25, + Sicherheitsmarge
+        // Factor ~1.25, + safety margin
         StringBuilder sb = new StringBuilder(data.Length * 5 / 4);
         int count = 0;
         uint tuple = 0;
@@ -31,7 +40,9 @@ public class Ascii85Encoder : BaseEncoder
             if (count >= 3)
             {
                 tuple |= b;
-                if (tuple == 0)
+                
+                // Only use compression 'z' if enabled (default Ascii85)
+                if (_useCompression && tuple == 0)
                 {
                     sb.Append('z');
                 }
@@ -62,7 +73,8 @@ public class Ascii85Encoder : BaseEncoder
         char[] encoded = new char[5];
         for (int i = 4; i >= 0; i--)
         {
-            encoded[i] = (char)((tuple % 85) + 33);
+            // Use characters from the mapping
+            encoded[i] = _mapping.Characters[(int)(tuple % 85)];
             tuple /= 85;
         }
         for (int i = 0; i < charsToWrite; i++)
@@ -86,14 +98,14 @@ public class Ascii85Encoder : BaseEncoder
 
             foreach (char c in data)
             {
-                // Whitespace ignorieren (entsprechend Spezifikation)
-                if (char.IsWhiteSpace(c))
+                // Ignore whitespace (only if enabled)
+                if (_ignoreWhitespace && char.IsWhiteSpace(c))
                 {
                     continue;
                 }
 
-                // 'z' steht für 4 Null-Bytes
-                if (c == 'z' && count == 0)
+                // 'z' stands for 4 zero bytes (only when activated)
+                if (_useCompression && c == 'z' && count == 0)
                 {
                     ms.WriteByte(0);
                     ms.WriteByte(0);
@@ -102,12 +114,15 @@ public class Ascii85Encoder : BaseEncoder
                     continue;
                 }
 
-                if (c < '!' || c > 'u')
+                // Get value from decoding map
+                byte val = (c < _characterMap.Length) ? _characterMap[c] : (byte)0xFF;
+
+                if (val == 0xFF)
                 {
-                    throw new ArgumentException($"Ungültiges Zeichen im Ascii85 String: {c}");
+                    throw new ArgumentException($"Invalid character in Ascii85 string: {c}");
                 }
 
-                tuple = tuple * 85 + (uint)(c - 33);
+                tuple = tuple * 85 + val;
                 count++;
 
                 if (count == 5)
@@ -125,17 +140,17 @@ public class Ascii85Encoder : BaseEncoder
             {
                 if (count == 1)
                 {
-                    throw new ArgumentException("Ascii85 Block darf nicht nur aus einem Zeichen bestehen.");
+                    throw new ArgumentException("An ASCII85 block must not consist of only one character.");
                 }
 
-                // Padding simulieren ('u' entspricht Wert 84)
+                // Simulate padding ('u' or value 84 corresponds to the last character in the alphabet)
                 int padding = 5 - count;
                 for (int i = 0; i < padding; i++)
                 {
                     tuple = tuple * 85 + 84;
                 }
 
-                // Wir schreiben (count - 1) Bytes
+                // We write (count - 1) bytes
                 int bytesToWrite = count - 1;
                 for (int i = 0; i < bytesToWrite; i++)
                 {
