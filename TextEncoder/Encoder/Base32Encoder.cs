@@ -19,23 +19,6 @@ public class Base32Encoder : BaseEncoder
     public static readonly Base32Encoder Crockford = new Base32Encoder(Base32Mapping.Crockford);
     public static readonly Base32Encoder ExtendedHex = new Base32Encoder(Base32Mapping.ExtendedHex);
 
-    public static Base32Encoder GetEncoder(Base32Format format)
-    {
-        switch (format)
-        {
-            case Base32Format.RFC4648:
-                return Rfc4648;
-            case Base32Format.ZBase32:
-                return ZBase32;
-            case Base32Format.Crockford:
-                return Crockford;
-            case Base32Format.ExtendedHex:
-                return ExtendedHex;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(format), format, null);
-        }
-    }
-
     private Base32Encoder(ICharacterMapping characterMapping)
     {
         _characterSet = characterMapping.Characters;

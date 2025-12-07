@@ -49,7 +49,7 @@ public sealed class Base32 : ISerializable
     {
         _bytes = bytes.ToArray();
         this.Format = format;
-        this.Value = Base32Encoder.GetEncoder(format).ToBase(this.Raw);
+        this.Value = EncoderFactory.GetEncoder(format).ToBase(this.Raw);
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public sealed class Base32 : ISerializable
     }
 
     /// <summary>
-    ///		Return hash value of the Base32 value.
+    ///		Return the hash value of the Base32 value.
     /// </summary>
     /// <returns>
     ///		A hash code for the current Base32 value.
@@ -95,7 +95,7 @@ public sealed class Base32 : ISerializable
     }
 
     ///  <summary>
-    /// 		Parses a Base32 formated string to Base32 object.
+    /// 		Parses a Base32 formated string to a Base32 object.
     ///  </summary>
     ///  <param name="value">
     /// 		Base32 formated string.
@@ -114,7 +114,7 @@ public sealed class Base32 : ISerializable
             throw new ArgumentNullException(nameof(value));
         }
 
-        byte[] raw = Base32Encoder.GetEncoder(format).FromBase(value);
+        byte[] raw = EncoderFactory.GetEncoder(format).FromBase(value);
         return new Base32(raw, value, format);
     }
 
@@ -159,7 +159,7 @@ public sealed class Base32 : ISerializable
     {
         this.Format = (Base32Format)info.GetValue("F", typeof(Base32Format));
         this.Value = (string)info.GetValue("V", typeof(string));
-        _bytes = Base32Encoder.GetEncoder(this.Format).FromBase(this.Value);
+        _bytes = EncoderFactory.GetEncoder(this.Format).FromBase(this.Value);
     }
 
     #endregion Serializable
