@@ -18,9 +18,11 @@ public class RadixEncoder
 {
     // The character set used for encoding (0-9, A-Z)
     // This supports bases up to 36.
-    private static string CharacterSet => "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static string DefaultCharacterSet => "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     private readonly int _radix;
+    private readonly char[] _characterSet;
+    private readonly bool _caseInsensitive;
 
     /// <summary>
     /// Initializes a new instance of the RadixEncoder class with a specific base.
@@ -28,12 +30,22 @@ public class RadixEncoder
     /// <param name="radix">The base system to use (must be between 2 and 36).</param>
     public RadixEncoder(int radix)
     {
-        if (radix < 2 || radix > CharacterSet.Length)
-        {
-            throw new ArgumentOutOfRangeException(nameof(radix), 
-                $"Radix must be between 2 and {CharacterSet.Length}.");
-        }
+        _characterSet = DefaultCharacterSet.ToCharArray();
         _radix = radix;
+        _caseInsensitive = true;
+
+        if (radix < 2 || radix > _characterSet.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(radix),
+                $"Radix must be between 2 and {_characterSet.Length}.");
+        }
+    }
+
+    protected RadixEncoder(char[] characterSet)
+    {
+        _characterSet = characterSet;
+        _radix = characterSet.Length;
+        _caseInsensitive = false;
     }
 
     /// <summary>
@@ -55,7 +67,7 @@ public class RadixEncoder
 
         // Handle negative numbers
         bool isNegative = value < 0;
-        
+
         // Use absolute value for calculation. 
         // Note: Math.Abs(long.MinValue) throws OverflowException, 
         // so real-world production code might need unsigned handling for that specific edge case.
@@ -67,7 +79,7 @@ public class RadixEncoder
         while (targetValue > 0)
         {
             long remainder = targetValue % _radix;
-            buffer.Insert(0, CharacterSet[(int)remainder]);
+            buffer.Insert(0, _characterSet[(int)remainder]);
             targetValue /= _radix;
         }
 
@@ -110,10 +122,10 @@ public class RadixEncoder
         // Algorithm: Iterate through chars, multiply result by radix and add current digit value
         for (int i = startIndex; i < input.Length; i++)
         {
-            char c = input[i];
-            
+            char c = _caseInsensitive ? char.ToUpper(input[i]) : input[i];
+
             // Find the numeric value of the character case-insensitively
-            int charValue = CharacterSet.IndexOf(char.ToUpper(c));
+            int charValue = Array.IndexOf(_characterSet, c);
 
             // Validation: Character must exist in set and be valid for the current radix
             if (charValue == -1 || charValue >= _radix)
