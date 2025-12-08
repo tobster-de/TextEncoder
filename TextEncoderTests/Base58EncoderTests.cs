@@ -16,9 +16,16 @@ public class Base58EncoderTests : GenericTestBase<Base58Encoder>
     {
         get
         {
+            yield return new TestCaseData("A", "28");
+            yield return new TestCaseData("AB", "5y3");
+            yield return new TestCaseData("ABC", "NvLz");
+            yield return new TestCaseData("XYZ", "WgBK");
+            yield return new TestCaseData("1234", "2FwFnT");
             yield return new TestCaseData("Test", "3A836b");
             yield return new TestCaseData("TestTest", "F7kVCJSZXKy");
             yield return new TestCaseData("TestTestTest", "2bNcNLF1HWfuXwN43");
+            yield return new TestCaseData("TestTestTestTest", "BRTJxkVxjAu9KBGGWFZvD9");
+            yield return new TestCaseData("The quick brown fox jumps over the lazy dog.", "USm3fpXnKG5EUBx2ndxBDMPVciP5hGey2Jh4NDv6gmeo1LkMeiKrLJUUBk6Z");
         }
     }
 

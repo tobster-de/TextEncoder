@@ -25,6 +25,7 @@ public class Base52EncoderTests : GenericTestBase<Base52Encoder>
             yield return new TestCaseData("TestTest", "qDgcHfnlwPo");
             yield return new TestCaseData("TestTestTest", "JHMYaYjxYEAoQltdA");
             yield return new TestCaseData("TestTestTestTest", "BzMbwxwSXRplexlbIOBIbQE");
+            yield return new TestCaseData("The quick brown fox jumps over the lazy dog.", "GTaiuJJDdTNAaGyFOtjsiweptruLwssSkYSEhVIDszaFrTYsqBAKmDhJMSPevC");
         }
     }
 
