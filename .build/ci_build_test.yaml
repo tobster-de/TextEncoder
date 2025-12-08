@@ -30,9 +30,17 @@ jobs:
       dotnet build ./TextEncoderTests/TextEncoderTests.csproj --configuration $(buildConfiguration) --no-restore
     displayName: build projects
 
-  - task: DotNetCoreCLI@2
-    displayName: test
+#  - task: DotNetCoreCLI@2
+#    displayName: test
+#    inputs:
+#      command: test
+#      projects: './TextEncoderTests/TextEncoderTests.csproj'
+#      arguments: '--configuration $(buildConfiguration)'
+  - task: VSTest@3
+    displayName: NUnit tests 
     inputs:
-      command: test
-      projects: './TextEncoderTests/TextEncoderTests.csproj'
-      arguments: '--configuration $(buildConfiguration)'
+      testSelector: 'testAssemblies'
+      testAssemblyVer2: |
+        **\bin\**\*test.dll
+        **\bin\**\*tests.dll
+      searchFolder: '$(System.DefaultWorkingDirectory)'
