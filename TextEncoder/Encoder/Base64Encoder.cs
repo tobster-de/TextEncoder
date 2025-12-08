@@ -10,17 +10,24 @@ namespace TextEncoder.Encoder;
 /// </remarks>
 public class Base64Encoder : BaseEncoder
 {
+    private static Base64Encoder? _default;
+    private static Base64Encoder? _defaultNoPadding;
+    private static Base64Encoder? _urlEncoding;
+    private static Base64Encoder? _xmlEncoding;
+    private static Base64Encoder? _regExEncoding;
+    private static Base64Encoder? _fileEncoding;
+
+    public static Base64Encoder Default => _default ??= new Base64Encoder(Base64Mapping.Default);
+    public static Base64Encoder DefaultNoPadding => _defaultNoPadding ??= new Base64Encoder(Base64Mapping.DefaultNoPadding);
+    public static Base64Encoder UrlEncoding => _urlEncoding ??= new Base64Encoder(Base64Mapping.UrlEncoding);
+    public static Base64Encoder XmlEncoding => _xmlEncoding ??= new Base64Encoder(Base64Mapping.XmlEncoding);
+    public static Base64Encoder RegExEncoding => _regExEncoding ??= new Base64Encoder(Base64Mapping.RegExEncoding);
+    public static Base64Encoder FileEncoding => _fileEncoding ??= new Base64Encoder(Base64Mapping.FileEncoding);
+
     private readonly char[] _characterSet;
     private readonly byte[] _characterMap;
     private readonly bool _usePadding;
     private readonly char? _paddingChar;
-
-    public static readonly Base64Encoder Default = new Base64Encoder(Base64Mapping.Default);
-    public static readonly Base64Encoder DefaultNoPadding = new Base64Encoder(Base64Mapping.DefaultNoPadding);
-    public static readonly Base64Encoder UrlEncoding = new Base64Encoder(Base64Mapping.UrlEncoding);
-    public static readonly Base64Encoder XmlEncoding = new Base64Encoder(Base64Mapping.XmlEncoding);
-    public static readonly Base64Encoder RegExEncoding = new Base64Encoder(Base64Mapping.RegExEncoding);
-    public static readonly Base64Encoder FileEncoding = new Base64Encoder(Base64Mapping.FileEncoding);
 
     internal Base64Encoder(ICharacterMapping characterMapping)
     {

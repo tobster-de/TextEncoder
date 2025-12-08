@@ -7,8 +7,11 @@ namespace TextEncoder.Encoder;
 
 public class Ascii85Encoder : BaseEncoder
 {
-    public static readonly Ascii85Encoder Original = new Ascii85Encoder(Ascii85Mapping.Original, useCompression: true, ignoreWhitespace: true);
-    public static readonly Ascii85Encoder ZeroMq = new Ascii85Encoder(Ascii85Mapping.ZeroMq, useCompression: false, ignoreWhitespace: false);
+    private static Ascii85Encoder? _original;
+    private static Ascii85Encoder? _zeroMq;
+
+    public static Ascii85Encoder Original => _original ??= new Ascii85Encoder(Ascii85Mapping.Original, useCompression: true, ignoreWhitespace: true);
+    public static Ascii85Encoder ZeroMq => _zeroMq ??= new Ascii85Encoder(Ascii85Mapping.ZeroMq, useCompression: false, ignoreWhitespace: false);
 
     private readonly ICharacterMapping _mapping;
     private readonly byte[] _characterMap;

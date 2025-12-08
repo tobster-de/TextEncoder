@@ -2,10 +2,15 @@ namespace TextEncoder.CharacterMapping;
 
 internal class Base32Mapping : CharacterMapping
 {
-    public static readonly Base32Mapping Rfc4648 = new Base32Mapping("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", '=');
-    public static readonly Base32Mapping ExtendedHex = new Base32Mapping("0123456789ABCDEFGHIJKLMNOPQRSTUV", '=');
-    public static readonly Base32Mapping ZBase32 = new Base32Mapping("ybndrfg8ejkmcpqxot1uwisza345h769");
-    public static readonly Base32Mapping Crockford = new CrockFordMapping();
+    private static Base32Mapping? _rfc4648;
+    private static Base32Mapping? _extendedHex;
+    private static Base32Mapping? _zbase32;
+    private static CrockFordMapping? _crockFord;
+
+    public static Base32Mapping Rfc4648 => _rfc4648 ??= new Base32Mapping("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", '=');
+    public static Base32Mapping ExtendedHex => _extendedHex ??= new Base32Mapping("0123456789ABCDEFGHIJKLMNOPQRSTUV", '=');
+    public static Base32Mapping ZBase32 => _zbase32 ??= new Base32Mapping("ybndrfg8ejkmcpqxot1uwisza345h769");
+    public static Base32Mapping Crockford => _crockFord ??= new CrockFordMapping();
 
     /// <inheritdoc />
     protected Base32Mapping(string characters, char? paddingChar = null) : base(characters.ToCharArray(), paddingChar)

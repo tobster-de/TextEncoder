@@ -9,16 +9,21 @@ namespace TextEncoder.Encoder;
 /// </summary>
 public class Base32Encoder : BaseEncoder
 {
+    private static Base32Encoder? _rfc4648;
+    private static Base32Encoder? _zBase32;
+    private static Base32Encoder? _extendedHex;
+    private static Base32Encoder? _crockford;
+
+    //The RFC 4648 Base32 alphabet
+    public static Base32Encoder Rfc4648 => _rfc4648 ??= new Base32Encoder(Base32Mapping.Rfc4648);
+    public static Base32Encoder ZBase32 => _zBase32 ??= new Base32Encoder(Base32Mapping.ZBase32);
+    public static Base32Encoder ExtendedHex => _extendedHex ??= new Base32Encoder(Base32Mapping.ExtendedHex);
+    public static Base32Encoder Crockford => _crockford ??= new Base32Encoder(Base32Mapping.Crockford);
+
     private readonly char[] _characterSet;
     private readonly byte[] _characterMap;
     private readonly char? _paddingChar;
     private readonly bool _usePadding;
-
-    //The RFC 4648 Base32 alphabet
-    public static readonly Base32Encoder Rfc4648 = new Base32Encoder(Base32Mapping.Rfc4648);
-    public static readonly Base32Encoder ZBase32 = new Base32Encoder(Base32Mapping.ZBase32);
-    public static readonly Base32Encoder Crockford = new Base32Encoder(Base32Mapping.Crockford);
-    public static readonly Base32Encoder ExtendedHex = new Base32Encoder(Base32Mapping.ExtendedHex);
 
     private Base32Encoder(ICharacterMapping characterMapping)
     {

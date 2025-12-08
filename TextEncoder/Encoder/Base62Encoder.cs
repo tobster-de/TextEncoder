@@ -8,7 +8,9 @@ namespace TextEncoder.Encoder;
 /// </summary>
 public class Base62Encoder : BaseEncoderWithCustomCharset
 {
-    public static readonly Base62Encoder Instance = new();
+    private static Base62Encoder? _instance;
+
+    public static Base62Encoder Instance => _instance ??= new Base62Encoder();
 
     private Base62Encoder() : base(Base62Mapping.Instance)
     {

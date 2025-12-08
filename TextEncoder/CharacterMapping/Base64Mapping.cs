@@ -2,12 +2,19 @@ namespace TextEncoder.CharacterMapping;
 
 internal class Base64Mapping : CharacterMapping
 {
-    internal static readonly Base64Mapping Default = new('+', '/', '=');
-    internal static readonly Base64Mapping DefaultNoPadding = new('+', '/');
-    internal static readonly Base64Mapping UrlEncoding = new('-', '_');
-    internal static readonly Base64Mapping XmlEncoding = new('_', ':');
-    internal static readonly Base64Mapping RegExEncoding = new('!', '-');
-    internal static readonly Base64Mapping FileEncoding = new('+', '-');
+    private static Base64Mapping? _default;
+    private static Base64Mapping? _defaultNoPadding;
+    private static Base64Mapping? _urlEncoding;
+    private static Base64Mapping? _xmlEncoding;
+    private static Base64Mapping? _regExEncoding;
+    private static Base64Mapping? _fileEncoding;
+
+    internal static Base64Mapping Default => _default ??= new Base64Mapping('+', '/', '=');
+    internal static Base64Mapping DefaultNoPadding => _defaultNoPadding ??= new Base64Mapping('+', '/');
+    internal static Base64Mapping UrlEncoding => _urlEncoding ??= new Base64Mapping('-', '_');
+    internal static Base64Mapping XmlEncoding => _xmlEncoding ??= new Base64Mapping('_', ':');
+    internal static Base64Mapping RegExEncoding => _regExEncoding ??= new Base64Mapping('!', '-');
+    internal static Base64Mapping FileEncoding => _fileEncoding ??= new Base64Mapping('+', '-');
 
     private const string CharacterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
