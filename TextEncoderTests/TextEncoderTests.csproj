@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <TargetFrameworks>netstandard2.1;net472</TargetFrameworks>
     <LangVersion>latestmajor</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

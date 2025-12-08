@@ -7,4 +7,32 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>embedded</DebugType>
+    <DocumentationFile>bin\Release\TextEncoder.xml</DocumentationFile>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="Nuget">
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Title>Text encoding library</Title>
+    <Authors>Tobias Kolb</Authors>
+    <Company>Open source community</Company>    
+    <Description>Library for common text encoding algorithms.</Description>
+    <PackageProjectUrl>https://github.com/tobster-de/TextEncoder</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/tobster-de/TextEncoder</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>Base64, Base58, Ascii85, Base32, Base52, Base62, Radix encoding</PackageTags>
+    <PackageReleaseNotes>- Initial version</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 </Project>
