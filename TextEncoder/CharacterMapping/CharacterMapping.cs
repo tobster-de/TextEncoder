@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TextEncoder.Encoder;
+namespace TextEncoder.CharacterMapping;
 
 internal abstract class CharacterMapping : ICharacterMapping
 {

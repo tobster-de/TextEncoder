@@ -1,4 +1,6 @@
-﻿namespace TextEncoder.Encoder;
+﻿using TextEncoder.CharacterMapping;
+
+namespace TextEncoder.Encoder;
 
 /// <summary>
 /// Base64 algorithm uses 6 bit segments

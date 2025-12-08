@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using TextEncoder.CharacterMapping;
 
 namespace TextEncoder.Encoder;
 

@@ -1,3 +1,5 @@
+using TextEncoder.CharacterMapping;
+
 namespace TextEncoder.Encoder;
 
 public class Base52Encoder : BaseEncoderWithCustomCharset

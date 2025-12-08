@@ -1,4 +1,4 @@
-namespace TextEncoder.Encoder;
+namespace TextEncoder.CharacterMapping;
 
 internal class Base32Mapping : CharacterMapping
 {
