@@ -141,9 +141,10 @@ public class RadixEncoderTests
     {
         // Arrange: Set up the encoder.
         var encoder = new RadixEncoder(10);
+        string nullValue = null!;
 
         // Act / Assert: Verify exceptions for null and empty/whitespace input.
-        Assert.Throws<ArgumentException>(() => encoder.Decode(null));
+        Assert.Throws<ArgumentException>(() => encoder.Decode(nullValue));
         Assert.Throws<ArgumentException>(() => encoder.Decode(""));
         Assert.Throws<ArgumentException>(() => encoder.Decode("   "));
     }
