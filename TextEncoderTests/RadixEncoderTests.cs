@@ -97,7 +97,7 @@ public class RadixEncoderTests
         string result = encoder.Encode(input);
 
         // Assert: Check if the sign is present and the magnitude is correct.
-        Assert.AreEqual(expected, result);
+        Assert.That(result, Is.EqualTo(expected));
     }
 
     // --- DECODE TESTS (string -> long) ---

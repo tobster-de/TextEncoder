@@ -32,18 +32,18 @@ public class Base64EncoderDefaultTests : GenericTestBase<Base64Encoder>
 	[Test, TestCaseSource(nameof(TestData))]
 	public void RoundTrip(byte[] d)
 	{
-		CollectionAssert.AreEqual(d, this.Subject!.FromBase(this.Subject!.ToBase(d)));
+        Assert.That(this.Subject!.FromBase(this.Subject!.ToBase(d)), Is.EqualTo(d).AsCollection);
 	}
 
 	[Test, TestCaseSource(nameof(TestData))]
 	public void ToBase64(byte[] d)
 	{
-		Assert.AreEqual(Convert.ToBase64String(d), this.Subject!.ToBase(d));
+        Assert.That(this.Subject!.ToBase(d), Is.EqualTo(Convert.ToBase64String(d)));
 	}
 
 	[Test, TestCaseSource(nameof(TestStrings))]
 	public void FromBase64(string s)
 	{
-		CollectionAssert.AreEqual(Convert.FromBase64String(s), this.Subject!.FromBase(s));
+        Assert.That(this.Subject!.FromBase(s), Is.EqualTo(Convert.FromBase64String(s)).AsCollection);
 	}
 }

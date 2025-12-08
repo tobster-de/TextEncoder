@@ -39,7 +39,7 @@ public class Base58EncoderTests : GenericTestBase<Base58Encoder>
         byte[] result = this.Subject!.FromBase(this.Subject!.ToBase(data));
 
         // Assert
-        CollectionAssert.AreEqual(data, result);
+        Assert.That(result, Is.EqualTo(data).AsCollection);
     }
 
     [Test, TestCaseSource(nameof(TestData))]
@@ -52,7 +52,7 @@ public class Base58EncoderTests : GenericTestBase<Base58Encoder>
         string result = this.Subject!.ToBase(data);
 
         // Assert
-        Assert.AreEqual(encoded, result);
+        Assert.That(result, Is.EqualTo(encoded));
     }
 
     [Test, TestCaseSource(nameof(TestData))]
@@ -65,6 +65,6 @@ public class Base58EncoderTests : GenericTestBase<Base58Encoder>
         byte[] result = this.Subject!.FromBase(encoded);
 
         // Assert
-        CollectionAssert.AreEqual(data, result);
+        Assert.That(result, Is.EqualTo(data).AsCollection);
     }
 }

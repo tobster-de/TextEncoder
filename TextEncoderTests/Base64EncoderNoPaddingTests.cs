@@ -32,7 +32,7 @@ public class Base64EncoderNoPaddingTests : GenericTestBase<Base64Encoder>
 	[Test, TestCaseSource(nameof(TestData))]
 	public void RoundTrip(byte[] d)
 	{
-		CollectionAssert.AreEqual(d, this.Subject!.FromBase(this.Subject!.ToBase(d)));
+        Assert.That(this.Subject!.FromBase(this.Subject!.ToBase(d)), Is.EqualTo(d).AsCollection);
 	}
 
 	[Test, TestCaseSource(nameof(TestData))]
@@ -44,6 +44,6 @@ public class Base64EncoderNoPaddingTests : GenericTestBase<Base64Encoder>
 	[Test, TestCaseSource(nameof(TestStrings))]
 	public void FromBase64(string s)
 	{
-		CollectionAssert.AreEqual(Convert.FromBase64String(s), this.Subject!.FromBase(s.Trim('=')));
+        Assert.That(this.Subject!.FromBase(s.Trim('=')), Is.EqualTo(Convert.FromBase64String(s)).AsCollection);
 	}
 }
