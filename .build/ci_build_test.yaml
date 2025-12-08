@@ -1,0 +1,46 @@
+name: CI Build
+#trigger: [ main ]
+pr: [ main ]
+
+variables:
+  buildConfiguration: Debug
+
+jobs:
+- job: Build_Test
+
+  pool:
+    vmImage: 'windows-latest'
+
+  steps:
+
+  # https://learn.microsoft.com/de-de/azure/devops/pipelines/tasks/reference/use-dotnet-v2
+  # https://github.com/dotnet/core/blob/main/release-notes/releases-index.json
+  - task: UseDotNet@2
+    inputs:
+      version: '8.0.x'  #lts
+      packageType: runtime
+
+  - script: |
+      dotnet restore ./TextEncoder/TextEncoder.csproj --no-dependencies
+      dotnet restore ./TextEncoderTests/TextEncoderTests.csproj --no-dependencies
+    displayName: restore packages
+
+  - script: |
+      dotnet build ./TextEncoder/TextEncoder.csproj --configuration $(buildConfiguration) --no-restore
+      dotnet build ./TextEncoderTests/TextEncoderTests.csproj --configuration $(buildConfiguration) --no-restore
+    displayName: build projects
+
+#  - task: DotNetCoreCLI@2
+#    displayName: test
+#    inputs:
+#      command: test
+#      projects: './TextEncoderTests/TextEncoderTests.csproj'
+#      arguments: '--configuration $(buildConfiguration)'
+  - task: VSTest@3
+    displayName: NUnit tests 
+    inputs:
+      testSelector: 'testAssemblies'
+      testAssemblyVer2: |
+        **\bin\**\*test.dll
+        **\bin\**\*tests.dll
+      searchFolder: '$(System.DefaultWorkingDirectory)'
