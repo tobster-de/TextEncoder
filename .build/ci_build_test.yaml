@@ -17,10 +17,6 @@ jobs:
   # https://github.com/dotnet/core/blob/main/release-notes/releases-index.json
   - task: UseDotNet@2
     inputs:
-      version: '10.0.x'  #lts
-      packageType: runtime
-  - task: UseDotNet@2
-    inputs:
       version: '8.0.x'  #lts
       packageType: runtime
 
