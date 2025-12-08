@@ -20,12 +20,12 @@ jobs:
       version: '8.0.x'  #lts
       packageType: runtime
 
-  - script:
+  - script: |
       dotnet restore ./TextEncoder/TextEncoder.csproj --no-dependencies
       dotnet restore ./TextEncoderTests/TextEncoderTests.csproj --no-dependencies
     displayName: restore packages
 
-  - script:
+  - script: |
       dotnet build ./TextEncoder/TextEncoder.csproj --configuration $(buildConfiguration) --no-restore
       dotnet build ./TextEncoderTests/TextEncoderTests.csproj --configuration $(buildConfiguration) --no-restore
     displayName: build projects
