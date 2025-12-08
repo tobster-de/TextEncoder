@@ -51,7 +51,7 @@ public class Base32EncoderCrockfordTests : GenericTestBase<Base32Encoder>
         byte[] result = this.Subject!.FromBase(this.Subject!.ToBase(data));
 
         // Assert
-        CollectionAssert.AreEqual(data, result);
+        Assert.That(result, Is.EqualTo(data).AsCollection);
     }
 
     [Test, TestCaseSource(nameof(TestData))]
@@ -64,7 +64,7 @@ public class Base32EncoderCrockfordTests : GenericTestBase<Base32Encoder>
         string result = this.Subject!.ToBase(data);
 
         // Assert
-        Assert.AreEqual(encoded, result);
+        Assert.That(result, Is.EqualTo(encoded));
     }
 
     [Test, TestCaseSource(nameof(TestData))]
@@ -77,7 +77,7 @@ public class Base32EncoderCrockfordTests : GenericTestBase<Base32Encoder>
         byte[] result = this.Subject!.FromBase(encoded);
 
         // Assert
-        CollectionAssert.AreEqual(data, result);
+        Assert.That(result, Is.EqualTo(data).AsCollection);
     }
 
     [Test, TestCaseSource(nameof(TestData))]
@@ -90,7 +90,7 @@ public class Base32EncoderCrockfordTests : GenericTestBase<Base32Encoder>
         byte[] result = this.Subject!.FromBase(encoded.ToLower());
 
         // Assert
-        CollectionAssert.AreEqual(data, result, $"Result: {Subject.Decode(encoded.ToLower())}");
+        Assert.That(result, Is.EqualTo(data).AsCollection, $"Result: {Subject.Decode(encoded.ToLower())}");
     }
 
     [Test, TestCaseSource(nameof(MistakenCharactersTestData))]
@@ -103,6 +103,6 @@ public class Base32EncoderCrockfordTests : GenericTestBase<Base32Encoder>
         byte[] result = this.Subject!.FromBase(encoded);
 
         // Assert
-        CollectionAssert.AreEqual(data, result);
+        Assert.That(result, Is.EqualTo(data).AsCollection);
     }
 }
