@@ -17,11 +17,29 @@ public class Base64Encoder : BaseEncoder
     private static Base64Encoder? _regExEncoding;
     private static Base64Encoder? _fileEncoding;
 
+    /// <summary>
+    /// Returns the default Base64 encoder.
+    /// </summary>
     public static Base64Encoder Default => _default ??= new Base64Encoder(Base64Mapping.Default);
+    /// <summary>
+    /// Returns the default Base64 encoder without padding.
+    /// </summary>
     public static Base64Encoder DefaultNoPadding => _defaultNoPadding ??= new Base64Encoder(Base64Mapping.DefaultNoPadding);
+    /// <summary>
+    /// Returns the Base64 encoder with URL safe characters.
+    /// </summary>
     public static Base64Encoder UrlEncoding => _urlEncoding ??= new Base64Encoder(Base64Mapping.UrlEncoding);
+    /// <summary>
+    /// Returns the Base64 encoder with XML compatible characters.
+    /// </summary>
     public static Base64Encoder XmlEncoding => _xmlEncoding ??= new Base64Encoder(Base64Mapping.XmlEncoding);
+    /// <summary>
+    /// Returns the Base64 encoder with RegEx compatible characters.
+    /// </summary>
     public static Base64Encoder RegExEncoding => _regExEncoding ??= new Base64Encoder(Base64Mapping.RegExEncoding);
+    /// <summary>
+    /// Returns the Base64 encoder with file system safe characters.
+    /// </summary>
     public static Base64Encoder FileEncoding => _fileEncoding ??= new Base64Encoder(Base64Mapping.FileEncoding);
 
     private readonly char[] _characterSet;
@@ -38,16 +56,25 @@ public class Base64Encoder : BaseEncoder
         _usePadding = characterMapping.PaddingChar.HasValue;
     }
 
+    /// <summary>
+    /// Converts a Base64 string to a byte array. This method equals the <see cref="System.Convert.FromBase64String"/> method in naming.
+    /// </summary>
     public static byte[] FromBase64String(string data)
     {
         return Default.FromBase(data);
     }
 
+    /// <summary>
+    /// Converts a byte array to a Base64 string. This method equals the <see cref="System.Convert.ToBase64String(byte[])"/> method in naming.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
     public static string ToBase64String(byte[] data)
     {
         return Default.ToBase(data);
     }
 
+    /// <inheritdoc/>
     public override string ToBase(byte[] data)
     {
         int length;
@@ -113,6 +140,7 @@ public class Base64Encoder : BaseEncoder
         }
     }
 
+    /// <inheritdoc/>
     public override byte[] FromBase(string data)
     {
         if (string.IsNullOrEmpty(data))

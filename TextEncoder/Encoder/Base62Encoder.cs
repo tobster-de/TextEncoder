@@ -10,6 +10,9 @@ public class Base62Encoder : BaseEncoderWithCustomCharset
 {
     private static Base62Encoder? _instance;
 
+    /// <summary>
+    /// Returns the singleton instance of this encoder.
+    /// </summary>
     public static Base62Encoder Instance => _instance ??= new Base62Encoder();
 
     private Base62Encoder() : base(Base62Mapping.Instance)

@@ -4,10 +4,16 @@ using System.Text;
 
 namespace TextEncoder.Encoder;
 
+/// <summary>
+/// Base class for all text encoders.
+/// </summary>
 public abstract class BaseEncoder : ITextEncoder
 {
     private readonly Encoding _encoding = new UTF8Encoding(true, true);
 
+    /// <summary>
+    /// Creates the reverse character mapping for the given character values.
+    /// </summary>
     protected static byte[] CreateCharacterMap(Dictionary<char, byte> characterValues)
     {
         byte[] characterMap = new byte[255];

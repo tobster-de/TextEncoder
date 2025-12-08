@@ -7,7 +7,7 @@ using TextEncoder.Encoder;
 namespace TextEncoder;
 
 /// <summary>
-///		This class is an immutable representation of a Base64 encoding.
+///	This class is an immutable representation of a Base64 encoding.
 /// </summary>
 [Serializable]
 public sealed class Base64 : ISerializable
@@ -37,14 +37,10 @@ public sealed class Base64 : ISerializable
     }
 
     /// <summary>
-    ///		Constructs a Base64 value from a byte array.
+    ///	Constructs a Base64 value from a byte array.
     /// </summary>
-    /// <param name="bytes">
-    ///		Source bytes for the Base64 value.
-    /// </param>
-    /// <param name="format">
-    ///		Specifies the Base64 encoding format.
-    /// </param>
+    /// <param name="bytes">Source bytes for the Base64 value.</param>
+    /// <param name="format">Specifies the Base64 encoding format.</param>
     public Base64(IEnumerable<byte> bytes, Base64Format format = Base64Format.Default)
     {
         _bytes = bytes.ToArray();
@@ -53,14 +49,10 @@ public sealed class Base64 : ISerializable
     }
 
     /// <summary>
-    ///		Determines whether the specified object is equal to the current object.
+    ///	Determines whether the specified object is equal to the current object.
     /// </summary>
-    /// <param name="obj">
-    ///		The object to compare with the current object.
-    /// </param>
-    /// <returns>
-    ///		True if the specified object is equal to the current object; otherwise, false.
-    /// </returns>
+    /// <param name="obj">The object to compare with the current object.</param>
+    /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
         if (obj is not Base64 asBase64)
@@ -73,40 +65,30 @@ public sealed class Base64 : ISerializable
     }
 
     /// <summary>
-    ///		Returns a string that represents the Base64 value.
+    ///	Returns a string that represents the Base64 value.
     /// </summary>
-    /// <returns>
-    ///		A string that represents the Base64 value.
-    /// </returns>
+    /// <returns>A string that represents the Base64 value.</returns>
     public override string ToString()
     {
         return this.Value;
     }
 
     /// <summary>
-    ///		Return the hash value of the Base64 value.
+    ///	Return the hash value of the Base64 value.
     /// </summary>
-    /// <returns>
-    ///		A hash code for the current Base64 value.
-    /// </returns>
+    /// <returns>A hash code for the current Base64 value.</returns>
     public override int GetHashCode()
     {
         return this.Value.GetHashCode();
     }
 
-    ///  <summary>
-    /// 		Parses a Base64 formated string to a Base64 object.
-    ///  </summary>
-    ///  <param name="value">
-    /// 		Base64 formated string.
-    ///  </param>
-    ///  <param name="format">
-    /// 		Specify the Base64 encoding format.
-    ///  </param>
-    ///  <exception cref="ArgumentNullException"></exception>
-    ///  <returns>
-    /// 		A Base64 representation of the Base64 formated string.
-    ///  </returns>
+    /// <summary>
+    ///	Parses a Base64 formated string to a Base64 object.
+    /// </summary>
+    /// <param name="value">Base64 formated string.</param>
+    /// <param name="format">Specify the Base64 encoding format.</param>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <returns>A Base64 representation of the Base64 formated string.</returns>
     public static Base64 Parse(string value, Base64Format format = Base64Format.Default)
     {
         if (value == null)
@@ -119,20 +101,12 @@ public sealed class Base64 : ISerializable
     }
 
     /// <summary>
-    ///		Tries to parse a Base64 formated string to Base64 object.
+    ///	Tries to parse a Base64 formated string to a Base64 object.
     /// </summary>
-    /// <param name="value">
-    ///		Base64 formated string.
-    /// </param>
-    /// <param name="base64">
-    ///		Return Base64 representation of the Base64 formatted string.
-    /// </param>
-    /// <param name="format">
-    ///		Specify the Base64 encoding format.
-    /// </param>
-    /// <returns>
-    ///		True if Parse of string was successful.
-    /// </returns>
+    /// <param name="value">Base64 formated string.</param>
+    /// <param name="base64">Return Base64 representation of the Base64 formatted string.</param>
+    /// <param name="format">Specify the Base64 encoding format.</param>
+    /// <returns>True if Parse of string was successful.</returns>
     public static bool TryParse(string value, out Base64? base64, Base64Format format = Base64Format.Default)
     {
         try

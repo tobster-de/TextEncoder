@@ -1,5 +1,8 @@
 namespace TextEncoder.Encoder;
 
+/// <summary>
+/// Interface for all text encoders
+/// </summary>
 public interface ITextEncoder
 {
     /// <summary>

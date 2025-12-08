@@ -10,6 +10,9 @@ public class Base58Encoder : BaseEncoderWithCustomCharset
 {
     private static Base58Encoder? _instance;
 
+    /// <summary>
+    /// Returns the singleton instance of this encoder.
+    /// </summary>
     public static Base58Encoder Instance => _instance ??= new Base58Encoder();
 
     private Base58Encoder() : base(Base58Mapping.Instance)

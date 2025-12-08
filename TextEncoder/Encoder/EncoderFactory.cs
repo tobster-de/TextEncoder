@@ -2,8 +2,14 @@ using System;
 
 namespace TextEncoder.Encoder;
 
+/// <summary>
+/// Factory for getting encoders from enum values.
+/// </summary>
 public static class EncoderFactory
 {
+    /// <summary>
+    /// Get an encoder for the given Base32 format.
+    /// </summary>
     public static Base32Encoder GetEncoder(Base32Format format)
     {
         switch (format)
@@ -20,7 +26,10 @@ public static class EncoderFactory
                 throw new ArgumentOutOfRangeException(nameof(format), format, null);
         }
     }
-    
+
+    /// <summary>
+    /// Get an encoder for the given Base64 format.
+    /// </summary>
     public static Base64Encoder GetEncoder(Base64Format format)
     {
         switch (format)

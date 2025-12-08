@@ -5,12 +5,25 @@ using TextEncoder.CharacterMapping;
 
 namespace TextEncoder.Encoder;
 
+/// <summary>
+/// Ascii85, also called Base85, is a binary-to-text encoding using five ASCII characters to represent four
+/// bytes of binary data (making the encoded size 1⁄4 larger than the original, assuming eight bits per ASCII
+/// character). This is more efficient than Base64.
+/// </summary>
 public class Ascii85Encoder : BaseEncoder
 {
     private static Ascii85Encoder? _original;
     private static Ascii85Encoder? _zeroMq;
 
+    /// <summary>
+    /// Standard Ascii85 uses a fixed character set (ASCII '!' to 'u').
+    /// </summary>
     public static Ascii85Encoder Original => _original ??= new Ascii85Encoder(Ascii85Mapping.Original, useCompression: true, ignoreWhitespace: true);
+
+    /// <summary>
+    /// Z85 is a variant of Ascii85 developed by the ZeroMQ project more suitable for embedding
+    /// binary data in source code, URLs, or JSON without requiring escaping.
+    /// </summary>
     public static Ascii85Encoder ZeroMq => _zeroMq ??= new Ascii85Encoder(Ascii85Mapping.ZeroMq, useCompression: false, ignoreWhitespace: false);
 
     private readonly ICharacterMapping _mapping;

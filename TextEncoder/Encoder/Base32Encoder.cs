@@ -14,10 +14,21 @@ public class Base32Encoder : BaseEncoder
     private static Base32Encoder? _extendedHex;
     private static Base32Encoder? _crockford;
 
-    //The RFC 4648 Base32 alphabet
+    /// <summary>
+    /// RFC4648 Base32 alphabet
+    /// </summary>
     public static Base32Encoder Rfc4648 => _rfc4648 ??= new Base32Encoder(Base32Mapping.Rfc4648);
+    /// <summary>
+    /// Z-Base-32 alphabet
+    /// </summary>
     public static Base32Encoder ZBase32 => _zBase32 ??= new Base32Encoder(Base32Mapping.ZBase32);
+    /// <summary>
+    /// Extended Hex alphabet
+    /// </summary>
     public static Base32Encoder ExtendedHex => _extendedHex ??= new Base32Encoder(Base32Mapping.ExtendedHex);
+    /// <summary>
+    /// Crockford's Base32 alphabet
+    /// </summary>
     public static Base32Encoder Crockford => _crockford ??= new Base32Encoder(Base32Mapping.Crockford);
 
     private readonly char[] _characterSet;

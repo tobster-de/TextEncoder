@@ -14,7 +14,7 @@ internal class Ascii85Mapping : CharacterMapping
         => _original ??= new Ascii85Mapping(Enumerable.Range('!', 'u').Select(i => (char)i).ToArray());
 
     /// <summary>
-    /// Z85 alternate character set
+    /// Z85 alternate character set, more suitable for embedding binary data in source code, URLs, or JSON without requiring escaping.
     /// </summary>
     public static Ascii85Mapping ZeroMq
         => _zeroMq ??= new Ascii85Mapping("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-:+=^!/*?&<>()[]{}@%$#".ToCharArray());

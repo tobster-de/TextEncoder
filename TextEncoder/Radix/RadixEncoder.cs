@@ -41,6 +41,9 @@ public class RadixEncoder
         }
     }
 
+    /// <summary>
+    /// Initializes a new instance of the RadixEncoder class with a custom character set.
+    /// </summary>
     protected RadixEncoder(char[] characterSet)
     {
         _characterSet = characterSet;

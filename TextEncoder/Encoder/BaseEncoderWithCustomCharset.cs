@@ -3,6 +3,9 @@ using TextEncoder.CharacterMapping;
 
 namespace TextEncoder.Encoder;
 
+/// <summary>
+/// Base class for text encoders that use a custom character set instead of the standard Base64 alphabet.
+/// </summary>
 public abstract class BaseEncoderWithCustomCharset : BaseEncoder
 {
     private readonly char[] _characterSet;
