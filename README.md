@@ -1,8 +1,8 @@
 # TextEncoder
 
 [![Build Status](https://dev.azure.com/tkolb80/TextEncoder/_apis/build/status%2FCreate%20Package?branchName=main)](https://dev.azure.com/tkolb80/TextEncoder/_build/latest?definitionId=10&branchName=main)
-![NuGet Version](https://img.shields.io/nuget/v/TextEncoder)
-![NuGet Downloads](https://img.shields.io/nuget/dt/TextEncoder)
+[![NuGet Version](https://img.shields.io/nuget/v/TextEncoder)](https://www.nuget.org/packages/TextEncoder)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/TextEncoder)](https://www.nuget.org/stats/packages/TextEncoder?groupby=Version)
 
 [`Install-Package TextEncoder`](https://www.nuget.org/packages/TextEncoder)
 
@@ -74,7 +74,7 @@ but encoding bits of the numbers directly.
 
 These number encoding schemes use the digits 0 to 9 and the letters A to Z. The base (also known as latin 'radix') 
 determines the number of unique characters used to represent the numbers. There is the `RadixEncoder` class that 
-covers all of these bases (radizes).
+covers all of these bases (radices).
 
 **Base52, Radix52**
 
@@ -88,6 +88,11 @@ are excluded.
 
 ## History
 
+### 1.1.0
+
+* Full test coverage
+* Bugfixes for issues discovered by code coverage analysis
+
 ### 1.0.1
 
 Just a documentation update (Readme)
@@ -95,10 +100,8 @@ Just a documentation update (Readme)
 ### 1.0.0
 
 Initial version
-
 * Base64 (multiple)
 * Base32 (multiple)
-
 * Ascii85, Z85 (ZeroMq)
 
 Encoders with limited character set
@@ -109,6 +112,5 @@ Encoders with limited character set
 Other elements
 * Base64 and Base32 value types
 * RadixEncoder
-
 * Nuget
 * Documentation
