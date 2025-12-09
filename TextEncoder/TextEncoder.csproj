@@ -17,7 +17,7 @@
   </PropertyGroup>
   
   <PropertyGroup Label="Nuget">
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Version>1.0.1</Version>
     <Title>Text encoding library</Title>
     <Authors>Tobias Kolb</Authors>
     <Company>Open source community</Company>    
@@ -28,11 +28,15 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>Base64, Base58, Ascii85, Base32, Base52, Base62, Radix encoding</PackageTags>
-    <PackageReleaseNotes>- Initial version</PackageReleaseNotes>
+    <PackageReleaseNotes>
+- Initial version
+- Readme update
+    </PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
