@@ -46,4 +46,53 @@ public class Base64EncoderNoPaddingTests : GenericTestBase<Base64Encoder>
 	{
         Assert.That(this.Subject!.FromBase(s.Trim('=')), Is.EqualTo(Convert.FromBase64String(s)).AsCollection);
 	}
+
+	[Test]
+	public void FromBase_WithEmptyInput()
+	{
+		// Arrange
+		string encoded = string.Empty;
+
+		// Act
+		byte[] result = this.Subject!.FromBase(encoded);
+
+		// Assert
+		Assert.That(result, Is.Empty);
+	}
+
+	[Test]
+	public void FromBase_WithInvalidInput()
+	{
+		// Arrange
+		string encoded = "abcdeöfghij";
+
+		// Act / Assert
+		Assert.Throws<FormatException>(() => this.Subject!.FromBase(encoded));
+	}
+
+	[Test]
+	public void ToBase_WithEmptyInput()
+	{
+		// Arrange
+		byte[] data = [];
+
+		// Act
+		string result = this.Subject!.ToBase(data);
+
+		// Assert
+		Assert.That(result, Is.Empty);
+	}
+
+	[Test]
+	public void ToBase_WithZeroes()
+	{
+		// Arrange
+		byte[] data = [0, 0, 0, 0];
+
+		// Act
+		string result = this.Subject!.ToBase(data);
+
+		// Assert
+		Assert.That(result, Is.EqualTo("AAAAAA"));
+	}
 }
