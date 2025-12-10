@@ -1,4 +1,5 @@
-﻿using TextEncoder.CharacterMapping;
+﻿using System;
+using TextEncoder.CharacterMapping;
 
 namespace TextEncoder.Encoder;
 
@@ -149,6 +150,15 @@ public class Base64Encoder : BaseEncoder
         }
 
         int length = data.Length;
+        for (int i = 0; i < length; i++)
+        {
+            if (data[i] == _paddingChar) continue;
+
+            if (_characterMap[data[i]] == 0xFF)
+            {
+                throw new FormatException($"Invalid character '{data[i]}' encountered.");
+            }
+        }
 
         unsafe
         {

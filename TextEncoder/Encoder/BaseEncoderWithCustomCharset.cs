@@ -39,6 +39,13 @@ public abstract class BaseEncoderWithCustomCharset : BaseEncoder
             return string.Empty;
         }
 
+        // Count leading zeros
+        int zeros = 0;
+        while (zeros < data.Length && data[zeros] == 0)
+        {
+            zeros++;
+        }
+
         // Convert byte array to a large integer (BigInteger requires little-endian, unsigned)
         // We reverse the part after leading zeros because BigInteger expects little-endian
         // and usually byte arrays for encoding are treated as big-endian numbers.
@@ -51,7 +58,7 @@ public abstract class BaseEncoderWithCustomCharset : BaseEncoder
         byte[] buffer = new byte[size];
         int length = 0;
 
-        for (int i = 0; i < data.Length; i++)
+        for (int i = zeros; i < data.Length; i++)
         {
             int carry = data[i];
             for (int j = 0; j < length; j++)
@@ -69,12 +76,18 @@ public abstract class BaseEncoderWithCustomCharset : BaseEncoder
         }
 
         // Construct the string
-        char[] result = new char[length];
+        char[] result = new char[zeros + length];
 
-        // Add the encoded characters (reverse the buffer)
+        // 1. Add the first character for each leading zero byte
+        for (int i = 0; i < zeros; i++)
+        {
+            result[i] = _characterSet[0];
+        }
+
+        // 2. Add the encoded characters (reverse the buffer)
         for (int i = 0; i < length; i++)
         {
-            result[length - 1 - i] = _characterSet[buffer[i]];
+            result[zeros + length - 1 - i] = _characterSet[buffer[i]];
         }
 
         return new string(result);
@@ -93,7 +106,14 @@ public abstract class BaseEncoderWithCustomCharset : BaseEncoder
         byte[] buffer = new byte[size];
         int length = 0;
 
-        for (int i = 0; i < data.Length; i++)
+        // Count leading 'zero' equivalents
+        int zeros = 0;
+        while (zeros < data.Length && data[zeros] == _characterSet[0])
+        {
+            zeros++;
+        }
+
+        for (int i = zeros; i < data.Length; i++)
         {
             char c = data[i];
             int digit = _characterMap[c];
@@ -119,14 +139,15 @@ public abstract class BaseEncoderWithCustomCharset : BaseEncoder
 
         // Remove trailing zeros from buffer (which are leading zeros in the big-endian result)
         // The buffer is currently little-endian
-        byte[] result = new byte[length];
+        int outputLength = zeros + length;
+        byte[] result = new byte[outputLength];
 
         // 1. Leading zeros are already 0 in the new array
 
         // 2. Copy the decoded bytes in reverse order
         for (int i = 0; i < length; i++)
         {
-            result[length - 1 - i] = buffer[i];
+            result[outputLength - 1 - i] = buffer[i];
         }
 
         return result;

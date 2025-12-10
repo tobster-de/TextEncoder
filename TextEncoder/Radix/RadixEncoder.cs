@@ -66,7 +66,7 @@ public class RadixEncoder
     public string Encode(long value)
     {
         // Handle the zero case immediately
-        if (value == 0) return "0";
+        if (value == 0) return _characterSet[0].ToString();
 
         // Handle negative numbers
         bool isNegative = value < 0;
