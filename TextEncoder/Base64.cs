@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using TextEncoder.Encoder;
 
 namespace TextEncoder;
@@ -9,8 +11,7 @@ namespace TextEncoder;
 /// <summary>
 ///	This class is an immutable representation of a Base64 encoding.
 /// </summary>
-[Serializable]
-public sealed class Base64 : ISerializable
+public class Base64 : IXmlSerializable
 {
     private byte[] _bytes;
 
@@ -22,12 +23,12 @@ public sealed class Base64 : ISerializable
     /// <summary>
     /// Returns the encoded value of this instance.
     /// </summary>
-    public string Value { get; }
+    public string Value { get; private set; }
 
     /// <summary>
     ///	Returns the encoding of the Base64 value.
     /// </summary>
-    public Base64Format Format { get; }
+    public Base64Format Format { get; private set; }
 
     private Base64(IEnumerable<byte> bytes, string value, Base64Format format)
     {
@@ -121,20 +122,34 @@ public sealed class Base64 : ISerializable
         }
     }
 
-    #region Serializable
+    #region XmlSerializable
 
-    void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+    private Base64()
     {
-        info.AddValue("F", this.Format);
-        info.AddValue("V", this.Value);
+    }
+    
+    public XmlSchema? GetSchema()
+    {
+        return null;
     }
 
-    private Base64(SerializationInfo info, StreamingContext context)
+    public void ReadXml(XmlReader reader)
     {
-        this.Format = (Base64Format)info.GetValue("F", typeof(Base64Format));
-        this.Value = (string)info.GetValue("V", typeof(string));
-        _bytes = EncoderFactory.GetEncoder(this.Format).FromBase(this.Value);
+        if (reader.MoveToContent() == XmlNodeType.Element)
+        {
+            this.Format = (Base64Format)Enum.Parse(typeof(Base64Format), reader["format"]);
+            this.Value = reader["value"];
+
+            _bytes = EncoderFactory.GetEncoder(this.Format).FromBase(this.Value);
+            reader.Read();
+        }
     }
 
-    #endregion Serializable
+    public void WriteXml(XmlWriter writer)
+    {
+        writer.WriteAttributeString("format", this.Format.ToString());
+        writer.WriteAttributeString("value", this.Value);
+    }
+
+    #endregion
 }
