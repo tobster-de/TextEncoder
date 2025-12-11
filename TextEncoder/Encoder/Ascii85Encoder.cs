@@ -136,7 +136,7 @@ public class Ascii85Encoder : BaseEncoder
 
                 if (val == 0xFF)
                 {
-                    throw new ArgumentException($"Invalid character in Ascii85 string: {c}");
+                    throw new FormatException($"Invalid character in Ascii85 string: {c}");
                 }
 
                 tuple = tuple * 85 + val;
@@ -157,7 +157,7 @@ public class Ascii85Encoder : BaseEncoder
             {
                 if (count == 1)
                 {
-                    throw new ArgumentException("An ASCII85 block must not consist of only one character.");
+                    throw new FormatException("An ASCII85 block must not consist of only one character.");
                 }
 
                 // Simulate padding ('u' or value 84 corresponds to the last character in the alphabet)

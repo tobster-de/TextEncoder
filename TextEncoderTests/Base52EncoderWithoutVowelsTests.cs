@@ -6,28 +6,36 @@ using TextEncoder.Encoder;
 namespace TextEncoderTests;
 
 [TestFixture]
-public class Base32EncoderHexTests : GenericTestBase<Base32Encoder>
+public class Base52EncoderWithoutVowelsTests : GenericTestBase<Base52Encoder>
 {
-    public Base32EncoderHexTests()
+    public Base52EncoderWithoutVowelsTests()
     {
-        this.Subject = Base32Encoder.ExtendedHex;
+        this.Subject = Base52Encoder.WithoutVowels;
     }
 
     public static IEnumerable TestData
     {
         get
         {
-            yield return new TestCaseData("\0\0\0\0", "0000000=");
-            yield return new TestCaseData("A", "84======");
-            yield return new TestCaseData("AB", "8510====");
-            yield return new TestCaseData("ABC", "85146===");
-            yield return new TestCaseData("XYZ", "B1CLK===");
-            yield return new TestCaseData("1234", "64P36D0=");
-            yield return new TestCaseData("Test", "AHIN6T0=");
-            yield return new TestCaseData("TestTest", "AHIN6T2KCLPN8===");
-            yield return new TestCaseData("TestTestTest", "AHIN6T2KCLPN8L35EDQ0====");
-            yield return new TestCaseData("TestTestTestTest", "AHIN6T2KCLPN8L35EDQ58PBJEG======");
-            yield return new TestCaseData("The quick brown fox jumps over the lazy dog.", "AHK6A83HELKM6QP0C9P6UTRE41J6UU10D9QMQS3J41NNCPBI41Q6GP90DHGNKU90CHNMEBG=");
+            yield return new TestCaseData("\0\0\0\0", "0000");
+            yield return new TestCaseData("A", "1F");
+            yield return new TestCaseData("AB", "69G");
+            yield return new TestCaseData("ABC", "ZPfC");
+            yield return new TestCaseData("XYZ", "n9Gy");
+            yield return new TestCaseData("1234", "28t1g8");
+            yield return new TestCaseData("Test", "3jf4X4");
+            yield return new TestCaseData("TestTest", "p3cX7bljwHm");
+            yield return new TestCaseData("TestTestTest", "97DSVSgxS40mJjsY0");
+            yield return new TestCaseData("TestTestTestTest", "1zDWwxwLRKnjZxjW8G18WJ4");
+            yield return new TestCaseData("The quick brown fox jumps over the lazy dog.", "6MVft993YMF0V6y5GsgrfwZnsqtCwrrLhSL4dP83rzV5qMSrp10Bk3d9DLHZv2");
+        }
+    }
+
+    public static IEnumerable BinaryData
+    {
+        get
+        {
+            yield return new TestCaseData(new byte[] { 0, 0, 0, 0 }, "1111");
         }
     }
 
@@ -69,7 +77,7 @@ public class Base32EncoderHexTests : GenericTestBase<Base32Encoder>
         byte[] result = this.Subject!.FromBase(encoded);
 
         // Assert
-        Assert.That(result, Is.EqualTo(data).AsCollection);
+        Assert.That(result, Is.EqualTo(data).AsCollection, $"Expected {plain} but got {System.Text.Encoding.UTF8.GetString(result)}");
     }
 
     [Test]

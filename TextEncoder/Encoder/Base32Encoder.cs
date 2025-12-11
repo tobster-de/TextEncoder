@@ -116,11 +116,6 @@ public class Base32Encoder : BaseEncoder
                 break;
             }
 
-            if (c >= _characterMap.Length)
-            {
-                throw new FormatException($"Invalid character '{c}' encountered.");
-            }
-
             byte value = _characterMap[c];
 
             // invalid characters are initialized with 0xFF (255)
