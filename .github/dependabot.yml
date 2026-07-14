@@ -11,3 +11,7 @@ updates:
     directory: "/TextEncoderTests"
     schedule:
       interval: "weekly"
+    groups:
+      nuget-packages:
+        patterns:
+          - "*"
